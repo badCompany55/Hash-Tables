@@ -1,6 +1,10 @@
 # '''
 # Linked List hash table key/value pair
 # '''
+
+from string import ascii_lowercase
+import math
+import time
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -15,7 +19,6 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
-
 
     def _hash(self, key):
         '''
@@ -51,7 +54,24 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        node = self.storage[index]
+        stor = self.storage[index]
+        ll = LinkedPair(key, value)
+
+        while node is not None and self.storage[index] is not key:
+            temp = node 
+            node = temp.next
+
+        if node is not None:
+            node.value = value
+        if node is None:
+            ll.next = self.storage[index]
+            self.storage[index] = ll
+        else:
+            prev_next = stor.next
+            stor.next = ll
+            ll.next = prev_next
 
 
 
@@ -63,7 +83,19 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        node = self.storage[index]
+        next_node = None
+        while node is not None and node.key != key:
+            next_node = node
+            node = next_node.next
+        if node is None:
+            print("Can't find key")
+        else:
+            if next_node is None:
+                self.storage[index] = node.next
+            else:
+                next_node.next = node.next
 
 
     def retrieve(self, key):
@@ -74,7 +106,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        node = self.storage[index]
+
+        while node is not None:
+            if node.key == key:
+                print(node.value)
+                return node.value
+            node = node.next
 
 
     def resize(self):
@@ -84,34 +123,44 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+        pair = 0
+        for i in storage:
+            pair = i
+            while pair is not None:
+                self.insert(pair.key, pair.value)
+                pair = pair.next
 
 
+# ht = HashTable(2)
+# ht._hash('t')
 
-if __name__ == "__main__":
-    ht = HashTable(2)
-
-    ht.insert("line_1", "Tiny hash table")
-    ht.insert("line_2", "Filled beyond capacity")
-    ht.insert("line_3", "Linked list saves the day!")
-
-    print("")
-
-    # Test storing beyond capacity
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
-
-    # Test resizing
-    old_capacity = len(ht.storage)
-    ht.resize()
-    new_capacity = len(ht.storage)
-
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
-
-    # Test if data intact after resizing
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
-
-    print("")
+# if __name__ == "__main__":
+#     ht = HashTable(2)
+#
+#     ht.insert("line_1", "Tiny hash table")
+#     ht.insert("line_2", "Filled beyond capacity")
+#     ht.insert("line_3", "Linked list saves the day!")
+#
+#     print("")
+#
+#     # Test storing beyond capacity
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
+#
+#     # Test resizing
+#     old_capacity = len(ht.storage)
+#     ht.resize()
+#     new_capacity = len(ht.storage)
+#
+#     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+#
+#     # Test if data intact after resizing
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
+#
+#     print("")
